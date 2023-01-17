@@ -9,8 +9,14 @@ CREATE TABLE product_attributes (
 
 CREATE TABLE product_types (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    type VARCHAR(255) NOT NULL UNIQUE,
+    type VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE product_type_attributes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    product_type_id INT NOT NULL,
     attribute_id INT NOT NULL,
+    FOREIGN KEY (product_type_id) REFERENCES product_types(id) ON DELETE CASCADE,
     FOREIGN KEY (attribute_id) REFERENCES product_attributes(id) ON DELETE CASCADE
 );
 
@@ -52,8 +58,21 @@ CREATE TABLE furniture (
 
 
 -- Insert Product Attributes
-INSERT INTO product_attributes (name, unit) VALUES ('size', 'MB'), ('weight', 'Kg'), ('height', 'cm'), ('width', 'cm'), ('length', 'cm');
-INSERT INTO product_types (type, attribute_id) VALUES ('DVD', 1), ('Book', 2), ('Furniture', 3);
+INSERT INTO product_attributes (name, unit) VALUES ("size", "MB");
+INSERT INTO product_attributes (name, unit) VALUES ("weight", "Kg");
+INSERT INTO product_attributes (name, unit) VALUES ("height", "cm");
+INSERT INTO product_attributes (name, unit) VALUES ("width", "cm");
+INSERT INTO product_attributes (name, unit) VALUES ("length", "cm");
+
+INSERT INTO product_types (type) VALUES ("DVD");
+INSERT INTO product_types (type) VALUES ("Book");
+INSERT INTO product_types (type) VALUES ("Furniture");
+
+INSERT INTO product_type_attributes (product_type_id, attribute_id) VALUES (1, 1);
+INSERT INTO product_type_attributes (product_type_id, attribute_id) VALUES (2, 2);
+INSERT INTO product_type_attributes (product_type_id, attribute_id) VALUES (3, 3);
+INSERT INTO product_type_attributes (product_type_id, attribute_id) VALUES (3, 4);
+INSERT INTO product_type_attributes (product_type_id, attribute_id) VALUES (3, 5);
 
 INSERT INTO products (sku, name, price, type) VALUES ('dvd001', 'The Shawshank Redemption', 19.99, 1);
 INSERT INTO dvd (product_id, size) VALUES (LAST_INSERT_ID(), '4.7');

@@ -56,27 +56,27 @@
             foreach($types as $type){
                 if ($type['type'] == 'DVD') {
                     echo '<tr class="type type_' . $type['id'] . '" style="display:none">
-                                <td>' . $type['attribute_name'] . ' (' . $type['attribute_unit'] . ')</td>
+                                <td>' . ucfirst($type['attribute_names']) . ' (' . $type['unit'] . ')</td>
                                 <td><input type="text" name="size"></td>
                             </tr>';
                 } 
                 else if ($type['type'] == 'Book') {
                     echo '<tr class="type type_' . $type['id'] . '" style="display:none">
-                                <td>' . $type['attribute_name'] . ' (' . $type['attribute_unit'] . ')</td>
+                                <td>' . ucfirst($type['attribute_names']) . ' (' . $type['unit'] . ')</td>
                                 <td><input type="text" name="weight"></td>
                             </tr>';
                 }
                 else if ($type['type'] == 'Furniture') {
                     echo '<tr class="type type_' . $type['id'] . '" style="display:none">
-                                <td>Height (' . $type['attribute_unit'] . ')</td>
+                                <td>Height (' . $type['unit'] . ')</td>
                                 <td><input type="text" name="height"></td>
                             </tr>
                             <tr class="type type_' . $type['id'] . '" style="display:none">
-                                <td>Width (' . $type['attribute_unit'] . ')</td>
+                                <td>Width (' . $type['unit'] . ')</td>
                                 <td><input type="text" name="width"></td>
                             </tr>
                             <tr class="type type_' . $type['id'] . '" style="display:none">
-                                <td>Length (' . $type['attribute_unit'] . ')</td>
+                                <td>Length (' . $type['unit'] . ')</td>
                                 <td><input type="text" name="length"></td>
                             </tr>';
                 }
@@ -88,6 +88,9 @@
         </tr>
     </table>
     </form>
+    <?php
+        echo json_encode($types);
+    ?>
     <script>
         $(document).ready(function(){
             $(select_types).change(function(){

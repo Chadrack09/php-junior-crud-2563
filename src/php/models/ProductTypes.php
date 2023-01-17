@@ -8,32 +8,25 @@
             $this->conn = $db;
         }
 
-        // public function read() {
-        //     $query = "SELECT product_types.id, product_types.type, 
-        //                      (SELECT GROUP_CONCAT(name) FROM product_attributes WHERE id = product_types.attribute_id) as attribute_names
-        //               FROM product_types";
-        //     $stmt = $this->conn->prepare($query);
-        //     $stmt->execute();
-        //     return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        // }
-
-        // public function read() {
-        //     $query = "SELECT product_types.id, product_types.type, product_attributes.name as attribute_name, product_attributes.unit as attribute_unit
-        //               FROM product_types
-        //               JOIN product_attributes ON product_types.attribute_id = product_attributes.id";
-        //     $stmt = $this->conn->prepare($query);
-        //     $stmt->execute();
-        //     return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        // }
-
         public function read() {
-            $query = "SELECT * FROM product_types";
+            $query = "SELECT pt.id, pt.type, GROUP_CONCAT(pa.name) as attribute_names, pa.unit
+                      FROM product_types pt
+                      JOIN product_type_attributes pta ON pt.id = pta.product_type_id
+                      JOIN product_attributes pa ON pta.attribute_id = pa.id
+                      GROUP BY pt.id";
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
-    
-            // return json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
+
+        // public function read() {
+        //     $query = "SELECT * FROM product_types";
+        //     $stmt = $this->conn->prepare($query);
+        //     $stmt->execute();
+    
+        //     // return json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+        //     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // }
     }
 
 ?>
