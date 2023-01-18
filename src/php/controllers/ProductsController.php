@@ -7,6 +7,23 @@ $database = new Database();
 $db = $database->getConnection();
 
 $product = new Product($db);
+
+$sku = "furniture-5";
+$name = "Office Chair";
+$price = 125.99;
+$type_id = 3;
+$productTypeData = array(
+    'height' => 40,
+    'width' => 60,
+    'length' => 80
+);
+
+if($product->create($sku, $name, $price, $type_id, $productTypeData)) {
+    echo "Product created successfully!";
+} else {
+    echo "Error creating product.";
+}
+
 $stmt = $product->read();
 $num = $stmt->rowCount();
 

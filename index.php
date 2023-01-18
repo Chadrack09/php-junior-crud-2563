@@ -68,38 +68,6 @@
         echo json_encode($types);
     ?>
 </div>
-
-    <script>
-        $(document).ready(function(){
-            $('#mass-delete-form').submit(function(e){
-                e.preventDefault();
-                var skus = [];
-                $('.delete-checkbox:checked').each(function(){
-                    skus.push($(this).val());
-                });
-                if(skus.length > 0){
-                    if(confirm("Are you sure you want to delete the selected products?")){
-                        $.post({
-                            url: 'src/php/controllers/MassDelete.php',
-                            data: {skus:skus},
-                        })
-                        .done(function(response){
-                            response = JSON.parse(response);
-                            if(response.status === "success"){
-                                alert("Selected products have been deleted.");
-                                location.reload();
-                            } 
-                            else {
-                                alert("An error occurred while deleting the selected products.");
-                            }
-                            console.log(response);
-                        });
-                    }
-                } else {
-                    alert("Please select at least one product to delete.");
-                }
-            });
-        });
-    </script>
+<script src="src/php/config/js/index.js"></script>
 </body>
 </html>
