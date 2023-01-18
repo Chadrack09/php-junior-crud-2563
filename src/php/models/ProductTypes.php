@@ -16,17 +16,14 @@
                       GROUP BY pt.id";
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // public function read() {
-        //     $query = "SELECT * FROM product_types";
-        //     $stmt = $this->conn->prepare($query);
-        //     $stmt->execute();
-    
-        //     // return json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
-        //     return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        // }
+            foreach ($result as &$product_type) {
+                $product_type['attribute_names'] = explode(',', $product_type['attribute_names']);
+            }
+
+            return $result;
+        }
     }
 
 ?>

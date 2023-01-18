@@ -39,13 +39,13 @@
             $stmt->bindParam(':sku', $sku);
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':price', $price);
-            $stmt->bindParam(':type', $type); 
+            $stmt->bindParam(':type', $type_id); 
             $stmt->execute();
             $product_id = $this->conn->lastInsertId();
         
             // Insert product type-specific data into appropriate table
             if($type == 'DVD') {
-                $query = "INSERT INTO dvd_discs (product_id, size) VALUES (:product_id, :size)";
+                $query = "INSERT INTO dvd (product_id, size) VALUES (:product_id, :size)";
                 $stmt = $this->conn->prepare($query);
                 $stmt->bindParam(':product_id', $product_id);
                 $stmt->bindParam(':size', $productTypeData['size']);

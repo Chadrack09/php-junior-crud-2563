@@ -22,22 +22,19 @@
 </head>
 <body>
     <h1>Add Product Page</h1>
-    <form
-        action="src/php/controllers/AddProduct.php"
-        method="post"
-    >
+    <form action="../php/controllers/AddProductController.php" method="post" id="add-product-form">
     <table>
         <tr>
             <td>SKU</td>
-            <td><input type="text" name="sku"></td>
+            <td><input type="text" name="sku" required></td>
         </tr>
         <tr>
             <td>Name</td>
-            <td><input type="text" name="name"></td>
+            <td><input type="text" name="name" required></td>
         </tr>
         <tr>
             <td>Price</td>
-            <td><input type="text" name="price"></td>
+            <td><input type="text" name="price" required></td>
         </tr>
         <tr>
             <td>Type</td>
@@ -56,29 +53,23 @@
             foreach($types as $type){
                 if ($type['type'] == 'DVD') {
                     echo '<tr class="type type_' . $type['id'] . '" style="display:none">
-                                <td>' . ucfirst($type['attribute_names']) . ' (' . $type['unit'] . ')</td>
+                                <td>' . ucfirst(reset($type['attribute_names'])) . ' (' . $type['unit'] . ')</td>
                                 <td><input type="text" name="size"></td>
                             </tr>';
                 } 
                 else if ($type['type'] == 'Book') {
                     echo '<tr class="type type_' . $type['id'] . '" style="display:none">
-                                <td>' . ucfirst($type['attribute_names']) . ' (' . $type['unit'] . ')</td>
-                                <td><input type="text" name="weight"></td>
+                                <td>' . ucfirst(reset($type['attribute_names'])) . ' (' . $type['unit'] . ')</td>
+                                <td><input type="text" name="weight" ></td>
                             </tr>';
                 }
                 else if ($type['type'] == 'Furniture') {
-                    echo '<tr class="type type_' . $type['id'] . '" style="display:none">
-                                <td>Height (' . $type['unit'] . ')</td>
-                                <td><input type="text" name="height"></td>
-                            </tr>
-                            <tr class="type type_' . $type['id'] . '" style="display:none">
-                                <td>Width (' . $type['unit'] . ')</td>
-                                <td><input type="text" name="width"></td>
-                            </tr>
-                            <tr class="type type_' . $type['id'] . '" style="display:none">
-                                <td>Length (' . $type['unit'] . ')</td>
-                                <td><input type="text" name="length"></td>
-                            </tr>';
+                    foreach($type['attribute_names'] as $attribute_name) {
+                        echo '<tr class="type type_' . $type['id'] . '" style="display:none">
+                                  <td>' . ucfirst($attribute_name) . ' (' . $type['unit'] . ')</td>
+                                  <td><input type="text" name="' . $attribute_name . '" ></td>
+                              </tr>';
+                    }
                 }
             }
         ?>
@@ -91,14 +82,7 @@
     <?php
         echo json_encode($types);
     ?>
-    <script>
-        $(document).ready(function(){
-            $(select_types).change(function(){
-                var productTypeId = $(this).val();
-                $(".type").hide();
-                $(".type_" + productTypeId).show();
-            })
-        });
-    </script>
+    <script src="../php/config/js/addProduct.js"></script>
+    <script src="../php/config/js/validation.js"></script>
 </body>
 </html>
