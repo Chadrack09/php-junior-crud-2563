@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    alert("addProduct.js");
     $(productType).change(function () {
         var productTypeId = $(this).val();
         $(".type").hide();
