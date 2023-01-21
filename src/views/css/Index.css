@@ -1,3 +1,25 @@
 body {
-    background-color: aqua;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.table-body {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid black;
+}
+
+.product-row {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid black;
+    min-width: 152px;
 }
