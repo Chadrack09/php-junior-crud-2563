@@ -51,7 +51,7 @@
                 $stmt->bindParam(':size', $productTypeData['size']);
                 $stmt->execute();
             } else if($type == 'Book') {
-                $query = "INSERT INTO books (product_id, weight) VALUES (:product_id, :weight)";
+                $query = "INSERT INTO book (product_id, weight) VALUES (:product_id, :weight)";
                 $stmt = $this->conn->prepare($query);
                 $stmt->bindParam(':product_id', $product_id);
                 $stmt->bindParam(':weight', $productTypeData['weight']);
@@ -118,6 +118,58 @@
     
             return $stmt;
         }
+
+        public function readAll() {
+            $query = "SELECT p.id, p.sku, p.name, p.price, p.type,
+                      f.height, f.width, f.length,
+                      b.weight,
+                      d.size
+                      FROM products p
+                      LEFT JOIN furniture f ON p.id = f.product_id
+                      LEFT JOIN book b ON p.id = b.product_id
+                      LEFT JOIN dvd d ON p.id = d.product_id";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute();
+            $products = array();
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                extract($row);
+                $product_item = array(
+                    "id" => $id,
+                    "sku" => $sku,
+                    "name" => $name,
+                    "price" => $price,
+                    "type" => $type,
+                    "attributes" => array()
+                );
+                if (!empty($height)) {
+                    $product_item["attributes"]["height"] = $height;
+                }
+                if (!empty($width)) {
+                    $product_item["attributes"]["width"] = $width;
+                }
+                if (!empty($length)) {
+                    $product_item["attributes"]["length"] = $length;
+                }
+                if (!empty($weight)) {
+                    $product_item["attributes"]["weight"] = $weight;
+                }
+                if (!empty($size)) {
+                    $product_item["attributes"]["size"] = $size;
+                }
+                array_push($products, $product_item);
+            }
+            return $products;
+        }
+
+        // public function fetchAll() {
+        //     $query = "SELECT sku, name, price, type FROM " . $this->table_name . " ORDER BY id";
+        //     $stmt = $this->conn->prepare($query);
+        //     $stmt->execute();
+
+        //     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+        //     return $result;
+        // }
         
         
         /**

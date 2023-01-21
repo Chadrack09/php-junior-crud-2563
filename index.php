@@ -11,6 +11,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="src/views/css/Index.css">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+
     <script src="https://code.jquery.com/jquery-3.6.3.min.js" 
         integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" 
         crossorigin="anonymous"></script>
@@ -26,42 +30,54 @@
     id="product_list_form"
 >
 <table id="product-table">
-    <thead>
-        <tr>
-            <th>SKU</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Type</th>
-            <th>Select</th>
-        </tr>
-    </thead>
-    <tbody>
+    <tbody class="table-body">
         <?php 
         $database = new Database();
         $db = $database->getConnection();
         $product = new Product($db);
-        $stmt = $product->read();
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-            extract($row);
-            echo "<tr>";
-                echo "<td>{$sku}</td>";
-                echo "<td>{$name}</td>";
-                echo "<td>{$price}</td>";
-                echo "<td>{$type}</td>";
-                echo "<td><input type='checkbox' class='delete-checkbox' value='{$sku}'></td>";
+        $productTypes = new ProductTypes($db);
+        $types = $productTypes->read();
+        $products = $product->readAll();
+
+        foreach($products as $product) {
+            echo "<tr class='product-row'>";
+            echo "<td>" . $product['sku'] . "</td>";
+            echo "<td>" . $product['name'] . "</td>";
+            echo "<td>" . $product['price'] . "</td>";
+            echo "<td>";
+            if (!empty($product['attributes'])) {
+                if($product['type']==='3'){
+                    echo "dimensions: " . $product['attributes']['height'] . "x" . $product['attributes']['width'] . "x" . $product['attributes']['length'] . "<br>";
+                }
+                else{
+                    foreach($product['attributes'] as $attribute_name => $attribute_value) {
+                        echo $attribute_name . ": " . $attribute_value . "<br>";
+                    }
+                }
+            }
+            echo "</td>";
             echo "</tr>";
         }
+
+        // while ($row = $products->fetch(PDO::FETCH_ASSOC)){
+        //     extract($row);
+        //     echo "<tr class='product-row'>";
+        //         echo "<td>{$sku}</td>";
+        //         echo "<td>{$name}</td>";
+        //         echo "<td>{$price} $</td>";
+        //         echo "<td>{$type}</td>";
+        //         echo "<td><input type='checkbox' class='delete-checkbox' value='{$sku}'></td>";
+        //     echo "</tr>";
+        // }
         ?>
-        <tr>
-            <td>
-                <input type="submit" value="MASS DELETE" id="mass-delete-btn">
-            </td>
-            <td>
-                <a href="/add-product">ADD</a>
-            </td>
-        </tr>
     </tbody>
-    </table>
+</table>
+    <input type="submit" value="MASS DELETE" id="mass-delete-btn">
+    <a href="src/views/AddProduct.php">ADD</a>
+    <h1 id="message">Types</h1>
+    <?php echo json_encode($types) ?>
+    <h1>Data</h1>
+    <?php echo json_encode($product->readAll()) ?>
 </form>
 <script src="src/views/js/index.js"></script>
 </body> 
