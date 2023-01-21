@@ -20,7 +20,7 @@
 <form
     action="src/php/controllers/MassDelete.php"
     method="post"
-    id="mass-delete-form"
+    id="product_list_form"
 >
 <table id="product-table">
     <thead>
@@ -38,7 +38,6 @@
         $db = $database->getConnection();
         $product = new Product($db);
         $stmt = $product->read();
-        // $stmt = $product;
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             extract($row);
             echo "<tr>";
@@ -50,24 +49,17 @@
             echo "</tr>";
         }
         ?>
+        <tr>
+            <td>
+                <input type="submit" value="MASS DELETE" id="mass-delete-btn">
+            </td>
+            <td>
+                <a href="/add-product">ADD</a>
+            </td>
+        </tr>
     </tbody>
     </table>
-    <!-- <button id="mass-delete-btn">Mass Delete</button>s -->
-    <input type="submit" value="Mass Delete" id="mass-delete-btn">
 </form>
-<input type="button" value="Add Product" onclick="window.location.href='src/views/AddProduct.php'">
-
-<div>
-    <?php
-        $productTypes = new ProductTypes($db);
-        $types = $productTypes->read();
-        // var_dump($types);
-        // foreach($types as $type){
-        //     echo "<div>{$type['type']}</div>";
-        // }
-        echo json_encode($types);
-    ?>
-</div>
 <script src="src/php/config/js/index.js"></script>
-</body>
+</body> 
 </html>
