@@ -84,7 +84,7 @@
         </tr>
     </table>
     </form>
-    <script src="../php/config/js/addProduct.js"></script>
-    <script src="../php/config/js/validation.js"></script>
+    <script src="js/addProduct.js"></script>
+    <script src="js/validation.js"></script>
 </body>
 </html>

@@ -9,10 +9,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product List</title>
+    <link rel="stylesheet" href="src/views/css/Index.css">
+
     <script src="https://code.jquery.com/jquery-3.6.3.min.js" 
         integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" 
         crossorigin="anonymous"></script>
+
+    <title>Product List</title>
 </head>
 <body>
     <h1>Product List</h1>
@@ -60,6 +63,6 @@
     </tbody>
     </table>
 </form>
-<script src="src/php/config/js/index.js"></script>
+<script src="src/views/js/index.js"></script>
 </body> 
 </html>
