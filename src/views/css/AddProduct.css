@@ -1,3 +1,78 @@
 body {
-    background-color: aquamarine;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 4rem auto;
+    width: 90%;
+}
+
+.product-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+    border-bottom: 2px solid black;
+}
+
+.btn-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.save-btn {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 8px 18px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background-color: #fc5145;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 8px 18px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+
+#product_form {
+    width: inherit;
 }
