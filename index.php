@@ -23,14 +23,14 @@
 </head>
 <body>
 <main class="main-container">
-    <div class="product-header">
-        <h1>Product List</h1>
-        <div>
-            <a href="src/views/AddProduct.php" class="add-btn">ADD</a>
-            <input type="submit" value="MASS DELETE" class="ms-dlt-btn" id="mass-delete-btn">
-        </div>
-    </div>
     <form action="src/php/controllers/MassDelete.php" method="post" id="product_list_form">
+        <div class="product-header">
+            <h1>Product List</h1>
+            <div class="btn-group">
+                <a href="src/views/AddProduct.php" class="add-btn">ADD</a>
+                <input type="submit" value="MASS DELETE" class="ms-dlt-btn" id="mass-delete-btn">
+            </div>
+        </div>
         <div class="table-body">
             <?php
                     $database = new Database();
@@ -66,10 +66,6 @@
             }
             ?>
         </div>
-        <h1 id="message">Types</h1>
-        <?php echo json_encode($types) ?>
-        <h1>Data</h1>
-        <?php echo json_encode($products) ?>
     </form>
 <main>
 <script src="src/views/js/index.js"></script>
