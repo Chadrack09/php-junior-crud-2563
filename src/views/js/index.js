@@ -7,7 +7,7 @@ $(document).ready(function () {
         });
         if (skus.length > 0) {
             $.post({
-                url: 'src/php/controllers/MassDeleteController.php',
+                url: 'src/php/controllers/ActionController.php',
                 data: { skus: skus },
             }).done(function (response, status) {
                 $response = JSON.parse(response);
