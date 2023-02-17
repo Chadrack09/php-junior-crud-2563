@@ -32,13 +32,13 @@
             </div>
         </div>
         <div class="table-body">
-            <?php
-                    $database = new Database();
-                    $db = $database->getConnection();
-                    $product = new Product($db);
-                    $productTypes = new ProductTypes($db);
-                    $types = $productTypes->read();
-                    $products = $product->readAll();
+        <?php
+            $database = new Database();
+            $db = $database->getConnection();
+            $product = new Product($db);
+            $productTypes = new ProductTypes($db);
+            $types = $productTypes->read();
+            $products = $product->readAll();
             foreach($products as $product) {
                 echo "<div class='table-body-item'>";
                 echo "<p>" . $product['sku'] . "</p>";
@@ -64,9 +64,15 @@
                 }
                 echo "</div>";
             }
-            ?>
+        ?>
         </div>
     </form>
+    <div>
+        <?php
+            // $product = new Product($db);
+            // echo json_encode($product->fetchAll());
+        ?>
+    </div>
 <main>
 <script src="src/views/js/index.js"></script>
 </body> 
