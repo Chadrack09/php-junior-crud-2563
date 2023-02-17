@@ -27,7 +27,7 @@
 </head>
 <body>
     <main class="main-container">
-        <form action="../php/controllers/AddProductController.php" method="POST" id="product_form">
+        <form action="../php/controllers/ActionController.php" method="POST" id="product_form">
         <div class="product-header">
             <h1>Product Add</h1>
             <div class="btn-group">
