@@ -21,7 +21,7 @@ $(document).ready(function () {
         }).done(function (response, status) {
             $response = JSON.parse(response);
             if (status == 'success') {
-                window.location.href = "/";
+                window.location.href = '/';
             }
         })
     });
