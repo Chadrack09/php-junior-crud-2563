@@ -27,7 +27,7 @@
         <div class="product-header">
             <h1>Product List</h1>
             <div class="btn-group">
-                <a href="src/views/AddProduct.php" class="add-btn">ADD</a>
+                <a href="/add-product" class="add-btn">ADD</a>
                 <input type="submit" value="MASS DELETE" class="ms-dlt-btn" id="mass-delete-btn">
             </div>
         </div>

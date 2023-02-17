@@ -18,10 +18,13 @@ $(document).ready(function () {
                     alert(data.error);
                 }
             },
-        }).done(function (response, status) {
+        }).done(function (response) {
             $response = JSON.parse(response);
-            if (status == 'success') {
-                window.location.href = '/';
+            if ($response.status === "success") {
+                window.location.href = "/";
+            }
+            else if ($response.status === "error") {
+                alert($response.message);
             }
         })
     });

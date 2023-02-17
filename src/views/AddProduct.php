@@ -1,6 +1,8 @@
 <?php
-    require_once('../php/config/Database.php');
-    require_once('../php/models/ProductTypes.php');
+    define('BASE_URL', 'https://' . $_SERVER['HTTP_HOST'] . '/');
+    require_once($_SERVER['DOCUMENT_ROOT'] . '/src/php/config/Database.php');
+    require_once($_SERVER['DOCUMENT_ROOT'] . '/src/php/models/ProductTypes.php');
+    
     $database = new Database();
     $db = $database->getConnection();
     $productTypes = new ProductTypes($db);
@@ -13,7 +15,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/AddProduct.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>src/views/css/AddProduct.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +29,7 @@
 </head>
 <body>
     <main class="main-container">
-        <form action="../php/controllers/ActionController.php" method="POST" id="product_form">
+        <form action="<?php echo BASE_URL; ?>src/php/controllers/ActionController.php" method="POST" id="product_form">
         <div class="product-header">
             <h1>Product Add</h1>
             <div class="btn-group">
@@ -67,14 +69,14 @@
                         echo '<tr class="type type_' . $type['id'] . '" style="display:none">
                                     <td>' . ucfirst(reset($type['attribute_names'])) . ' (' . $type['unit'] . ')</td>
                                     <td><input type="text" name="'. $type["attribute_names"][0] .'" id="'. $type["attribute_names"][0] .'"
-                                            placeholder="#'. $type["attribute_names"][0] .'"></td>
+                                            placeholder="#'. $type["attribute_names"][0] .'" ></td>
                                 </tr>';
                     } 
                     else if ($type['type'] == 'Book') {
                         echo '<tr class="type type_' . $type['id'] . '" style="display:none">
                                     <td>' . ucfirst(reset($type['attribute_names'])) . ' (' . $type['unit'] . ')</td>
                                     <td><input type="text" name="'. $type["attribute_names"][0] .'" id="'. $type["attribute_names"][0] .'" 
-                                            placeholder="#'. $type["attribute_names"][0] .'"></td>
+                                            placeholder="#'. $type["attribute_names"][0] .'" ></td>
                                 </tr>';
                     }
                     else if ($type['type'] == 'Furniture') {
@@ -82,7 +84,7 @@
                             echo '<tr class="type type_' . $type['id'] . '" style="display:none">
                                     <td>' . ucfirst($attribute_name) . ' (' . $type['unit'] . ')</td>
                                     <td><input type="text" name="' . $attribute_name . '" id="'. $attribute_name .'" 
-                                            placeholder="#'. $attribute_name .'"></td>
+                                            placeholder="#'. $attribute_name .'" ></td>
                                 </tr>';
                         }
                     }
@@ -91,7 +93,7 @@
         </table>
         </form>
     </main>
-    <script src="js/addProduct.js"></script>
-    <script src="js/validation.js"></script>
+    <script src="<?php echo BASE_URL; ?>src/views/js/addProduct.js"></script>
+    <script src="<?php echo BASE_URL; ?>src/views/js/validation.js"></script>
 </body>
 </html>
