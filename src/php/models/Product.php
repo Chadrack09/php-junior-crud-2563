@@ -67,10 +67,7 @@
             }
             return true;
         }
-                
-                
-        
-
+      
         // public function create($sku, $name, $price, $type, $productTypeData) {
         //     $query = "INSERT INTO products (sku, name, price, type) VALUES (:sku, :name, :price, :type)";
         //     $stmt = $this->conn->prepare($query);
@@ -119,6 +116,10 @@
             return $stmt;
         }
 
+        /**
+         * Read all products from the database
+         * @return array
+         */
         public function readAll() {
             $query = "SELECT p.id, p.sku, p.name, p.price, p.type,
                       f.height, f.width, f.length,
@@ -161,16 +162,40 @@
             return $products;
         }
 
-        // public function fetchAll() {
-        //     $query = "SELECT sku, name, price, type FROM " . $this->table_name . " ORDER BY id";
-        //     $stmt = $this->conn->prepare($query);
-        //     $stmt->execute();
-
-        //     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-        //     return $result;
-        // }
+        /**
+         * Read all products from the database and return as an array
+         */
+        public function fetchAll() {
+            $query = "SELECT p.id, p.sku, p.name, p.price, p.type, dvd.size, book.weight, furniture.height, furniture.width, furniture.length FROM products p 
+                      LEFT JOIN dvd ON p.id = dvd.product_id 
+                      LEFT JOIN book ON p.id = book.product_id 
+                      LEFT JOIN furniture ON p.id = furniture.product_id";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute();
         
+            $products = array();
+        
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $product = new stdClass();
+                $product->id = $row['id'];
+                $product->sku = $row['sku'];
+                $product->name = $row['name'];
+                $product->price = $row['price'];
+                $product->type = $row['type'];
+                
+                if($product->type == 'DVD') {
+                    $product->size = $row['size'];
+                } else if($product->type == 'Book') {
+                    $product->weight = $row['weight'];
+                } else if($product->type == 'Furniture') {
+                    $product->dimensions = 'H:' . $row['height'] . ', W:' . $row['width'] . ', L:' . $row['length'];
+                }
+        
+                $products[] = $product;
+            }
+        
+            return $products;
+        }
         
         /**
          * Update a product in the database
