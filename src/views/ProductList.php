@@ -1,48 +1,37 @@
 <?php
-    include_once $_SERVER['DOCUMENT_ROOT'] . '/src/main/php/com/scandiweb/config/Database.php';
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product List</title>
-</head>
-<body>
-    <h1>Product List</h1>
-    <div>
+class ProductList {
+    private $products;
 
-<table id="product-table">
-    <thead>
-        <tr>
-            <th>SKU</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Type</th>
-            <th>Select</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php 
-        $database = new Database();
-        $db = $database->getConnection();
-        $product = new Product($db);
-        $stmt = $product->read();
-        $stmt = $products;
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-            extract($row);
-            echo "<tr>";
-                echo "<td>{$sku}</td>";
-                echo "<td>{$name}</td>";
-                echo "<td>{$price}</td>";
-                echo "<td>{$type}</td>";
-                echo "<td><input type='checkbox' class='delete-checkbox' value='{$sku}'></td>";
-            echo "</tr>";
+    function __construct($products) {
+        $this->products = $products;
+    }
+
+    public function render() {
+        $products = $this->products;
+        foreach($products as $product) {
+            echo "<div class='table-body-item'>";
+            echo "<p>" . $product['sku'] . "</p>";
+            echo "<p>" . $product['name'] . "</p>";
+            echo "<p>" . $product['price'] . " $</p>";
+            if (!empty($product['attributes'])) {
+                if($product['type']==='3'){
+                    echo "<p>dimensions: " . $product['attributes']['height'] . "x" . $product['attributes']['width'] . "x" . $product['attributes']['length'] . "</p>";
+                    echo "<input type='checkbox' class='delete-checkbox' value='{$product['sku']}'>";
+                }
+                else{
+                    foreach($product['attributes'] as $attribute_name => $attribute_value) {
+                        echo "<p>" . $attribute_name . ": ";
+                        if ($attribute_name === 'size') {
+                            echo $attribute_value . "MB";
+                        } else if($attribute_name === 'weight') {
+                            echo $attribute_value . "KG";
+                        }
+                        echo "</p>";
+                        echo "<input type='checkbox' class='delete-checkbox' value='{$product['sku']}'>";
+                    }
+                }
+            }
+            echo "</div>";
         }
-        ?>
-    </tbody>
-    </table>
-    <button id="mass-delete-btn">Mass Delete</button>
-</body>
-</html>
+    }
+}
