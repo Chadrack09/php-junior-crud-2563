@@ -2,11 +2,14 @@
     define('BASE_URL', 'https://' . $_SERVER['HTTP_HOST'] . '/');
     require_once($_SERVER['DOCUMENT_ROOT'] . '/src/php/config/Database.php');
     require_once($_SERVER['DOCUMENT_ROOT'] . '/src/php/models/ProductTypes.php');
+    require_once('./AttributeList.php');
     
     $database = new Database();
     $db = $database->getConnection();
     $productTypes = new ProductTypes($db);
     $types = $productTypes->read();
+
+    $attributeList = new AttributeList($types);
 ?>
 
 <!DOCTYPE html>
@@ -39,19 +42,19 @@
         </div>
         <table>
             <tr>
-                <td>SKU</td>
+                <td style="width: 6rem">SKU</td>
                 <td><input type="text" name="sku" id="sku" placeholder="#sku" required></td>
             </tr>
             <tr>
-                <td>Name</td>
+                <td style="width: 6rem">Name</td>
                 <td><input type="text" name="name" id="name" placeholder="#name" required></td>
             </tr>
             <tr>
-                <td>Price</td>
+                <td style="width: 6rem">Price</td>
                 <td><input type="text" name="price" id="price" placeholder="#price" required></td>
             </tr>
             <tr>
-                <td style="padding-right: 4rem;">Type</td>
+                <td style="width: 6rem">Type</td>
                 <td>
                     <select name="types" id="productType">
                         <option value="">Select Type</option>
@@ -64,31 +67,7 @@
                 </td>
             </tr>
             <?php
-                foreach($types as $type){
-                    if ($type['type'] == 'DVD') {
-                        echo '<tr class="type type_' . $type['id'] . '" style="display:none">
-                                    <td>' . ucfirst(reset($type['attribute_names'])) . ' (' . $type['unit'] . ')</td>
-                                    <td><input type="text" name="'. $type["attribute_names"][0] .'" id="'. $type["attribute_names"][0] .'"
-                                            placeholder="#'. $type["attribute_names"][0] .'" ></td>
-                                </tr>';
-                    } 
-                    else if ($type['type'] == 'Book') {
-                        echo '<tr class="type type_' . $type['id'] . '" style="display:none">
-                                    <td>' . ucfirst(reset($type['attribute_names'])) . ' (' . $type['unit'] . ')</td>
-                                    <td><input type="text" name="'. $type["attribute_names"][0] .'" id="'. $type["attribute_names"][0] .'" 
-                                            placeholder="#'. $type["attribute_names"][0] .'" ></td>
-                                </tr>';
-                    }
-                    else if ($type['type'] == 'Furniture') {
-                        foreach($type['attribute_names'] as $attribute_name) {
-                            echo '<tr class="type type_' . $type['id'] . '" style="display:none">
-                                    <td>' . ucfirst($attribute_name) . ' (' . $type['unit'] . ')</td>
-                                    <td><input type="text" name="' . $attribute_name . '" id="'. $attribute_name .'" 
-                                            placeholder="#'. $attribute_name .'" ></td>
-                                </tr>';
-                        }
-                    }
-                }
+                echo $attributeList->render();
             ?>
         </table>
         </form>

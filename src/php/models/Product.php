@@ -7,12 +7,68 @@
 
     class Product {
         private $conn;
+        private $sku;
+        private $name;
+        private $price;
+        private $type_id;
+        private $productTypeData;
         private $table_name = "products";
         
         public function __construct($db) {
             $this->conn = $db;
         }
 
+        public function __construct2($db, $sku, $name, $price, $type_id, $productTypeData) {
+            $this->conn = $db;
+            $this->sku = $sku;
+            $this->name = $name;
+            $this->price = $price;
+            $this->type_id = $type_id;
+            $this->productTypeData = $productTypeData;
+        }
+
+        /**
+         * Getters and Setters
+         */
+        public function getSku() {
+            return $this->sku;
+        }
+
+        public function setSku($sku) {
+            $this->sku = $sku;
+        }
+
+        public function getName() {
+            return $this->name;
+        }
+
+        public function setName($name) {
+            $this->name = $name;
+        }
+
+        public function getPrice() {
+            return $this->price;
+        }
+
+        public function setPrice($price) {
+            $this->price = $price;
+        }
+
+        public function getType() {
+            return $this->type_id;
+        }
+
+        public function setType($type_id) {
+            $this->type_id = $type_id;
+        }
+
+        public function getProductTypeData() {
+            return $this->productTypeData;
+        }
+
+        public function setProductTypeData($productTypeData) {
+            $this->productTypeData = $productTypeData;
+        }
         
         /**
          * Create a new product in the database
@@ -24,85 +80,50 @@
          * @return bool
          */
 
-        public function create($sku, $name, $price, $type_id, $productTypeData) {
-            // Fetch product type string based on id
+         public function create($sku, $name, $price, $type_id, $productTypeData) {
+            $this->type = $this->getProductType($type_id);
+    
+            // Insert product data into products table
+            $productData = ['sku' => $sku, 'name' => $name, 'price' => $price, 'type' => $type_id];
+            $productId = $this->insert('products', $productData);
+    
+            // Insert product type-specific data into appropriate table
+            $typeTable = $this->getTypeTable($this->type);
+            $productTypeData['product_id'] = $productId;
+            $this->insert($typeTable, $productTypeData);
+    
+            return true;
+        }
+    
+        protected function getProductType($type_id) {
             $query = "SELECT type FROM product_types WHERE id = :id";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':id', $type_id);
             $stmt->execute();
             $type = $stmt->fetch(PDO::FETCH_ASSOC);
-            $type = $type['type'];
-            
-            // Insert product data into products table
-            $query = "INSERT INTO products (sku, name, price, type) VALUES (:sku, :name, :price, :type)";
-            $stmt = $this->conn->prepare($query);
-            $stmt->bindParam(':sku', $sku);
-            $stmt->bindParam(':name', $name);
-            $stmt->bindParam(':price', $price);
-            $stmt->bindParam(':type', $type_id); 
-            $stmt->execute();
-            $product_id = $this->conn->lastInsertId();
-        
-            // Insert product type-specific data into appropriate table
-            if($type == 'DVD') {
-                $query = "INSERT INTO dvd (product_id, size) VALUES (:product_id, :size)";
-                $stmt = $this->conn->prepare($query);
-                $stmt->bindParam(':product_id', $product_id);
-                $stmt->bindParam(':size', $productTypeData['size']);
-                $stmt->execute();
-            } else if($type == 'Book') {
-                $query = "INSERT INTO book (product_id, weight) VALUES (:product_id, :weight)";
-                $stmt = $this->conn->prepare($query);
-                $stmt->bindParam(':product_id', $product_id);
-                $stmt->bindParam(':weight', $productTypeData['weight']);
-                $stmt->execute();
-            } else if($type == 'Furniture') {
-                $query = "INSERT INTO furniture (product_id, height, width, length) VALUES (:product_id, :height, :width, :length)";
-                $stmt = $this->conn->prepare($query);
-                $stmt->bindParam(':product_id', $product_id);
-                $stmt->bindParam(':height', $productTypeData['height']);
-                $stmt->bindParam(':width', $productTypeData['width']);
-                $stmt->bindParam(':length', $productTypeData['length']);
-                $stmt->execute();
-            }
-            return true;
+            return $type['type'];
         }
-      
-        // public function create($sku, $name, $price, $type, $productTypeData) {
-        //     $query = "INSERT INTO products (sku, name, price, type) VALUES (:sku, :name, :price, :type)";
-        //     $stmt = $this->conn->prepare($query);
-        //     $stmt->bindParam(':sku', $sku);
-        //     $stmt->bindParam(':name', $name);
-        //     $stmt->bindParam(':price', $price);
-        //     $stmt->bindParam(':type', $type);
-        //     $stmt->execute();
-        //     $product_id = $this->conn->lastInsertId();
-
-        //     if($type == 'DVD') {
-        //         $query = "INSERT INTO dvd (product_id, size) VALUES (:product_id, :size)";
-        //         $stmt = $this->conn->prepare($query);
-        //         $stmt->bindParam(':product_id', $product_id);
-        //         $stmt->bindParam(':size', $productTypeData['size']);
-        //         $stmt->execute();
-        //     } else if($type == 'Book') {
-        //         $query = "INSERT INTO book (product_id, weight) VALUES (:product_id, :weight)";
-        //         $stmt = $this->conn->prepare($query);
-        //         $stmt->bindParam(':product_id', $product_id);
-        //         $stmt->bindParam(':weight', $productTypeData['weight']);
-        //         $stmt->execute();
-        //     } else if($type == 'Furniture') {
-        //         $query = "INSERT INTO furniture (product_id, height, width, length) VALUES (:product_id, :height, :width, :length)";
-        //         $stmt = $this->conn->prepare($query);
-        //         $stmt->bindParam(':product_id', $product_id);
-        //         $stmt->bindParam(':height', $productTypeData['height']);
-        //         $stmt->bindParam(':width', $productTypeData['width']);
-        //         $stmt->bindParam(':length', $productTypeData['length']);
-        //         $stmt->execute();
-        //     }
-
-        //     return true;
-        // }
-
+    
+        protected function getTypeTable($type) {
+            $tableMap = [
+                'DVD' => 'dvd',
+                'Book' => 'book',
+                'Furniture' => 'furniture'
+            ];
+            return $tableMap[$type];
+        }
+    
+        protected function insert($table, $data) {
+            $columns = implode(', ', array_keys($data));
+            $placeholders = ':' . implode(', :', array_keys($data));
+            $query = "INSERT INTO $table ($columns) VALUES ($placeholders)";
+            $stmt = $this->conn->prepare($query);
+            foreach ($data as $key => $value) {
+                $stmt->bindValue(':' . $key, $value);
+            }
+            $stmt->execute();
+            return $this->conn->lastInsertId();
+        }
 
         /**
          * Read all products from the database

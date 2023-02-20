@@ -1,7 +1,15 @@
 <?php
     require_once($_SERVER['DOCUMENT_ROOT'] . '/src/php/config/Database.php');
     require_once($_SERVER['DOCUMENT_ROOT'] . '/src/php/models/Product.php');
-    require_once($_SERVER['DOCUMENT_ROOT'] . '/src/php/models/ProductTypes.php');
+    require_once($_SERVER['DOCUMENT_ROOT'] . '/src/views/ProductList.php');
+
+    $database = new Database();
+    $db = $database->getConnection();
+
+    $product = new Product($db);
+    $products = $product->readAll();
+
+    $productList = new ProductList($products);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,46 +41,10 @@
         </div>
         <div class="table-body">
         <?php
-            $database = new Database();
-            $db = $database->getConnection();
-            $product = new Product($db);
-            $productTypes = new ProductTypes($db);
-            $types = $productTypes->read();
-            $products = $product->readAll();
-            foreach($products as $product) {
-                echo "<div class='table-body-item'>";
-                echo "<p>" . $product['sku'] . "</p>";
-                echo "<p>" . $product['name'] . "</p>";
-                echo "<p>" . $product['price'] . " $</p>";
-                if (!empty($product['attributes'])) {
-                    if($product['type']==='3'){
-                        echo "<p>dimensions: " . $product['attributes']['height'] . "x" . $product['attributes']['width'] . "x" . $product['attributes']['length'] . "</p>";
-                        echo "<input type='checkbox' class='delete-checkbox' value='{$product['sku']}'>";
-                    }
-                    else{
-                        foreach($product['attributes'] as $attribute_name => $attribute_value) {
-                            echo "<p>" . $attribute_name . ": ";
-                            if ($attribute_name === 'size') {
-                                echo $attribute_value . "MB";
-                            } else if($attribute_name === 'weight') {
-                                echo $attribute_value . "KG";
-                            }
-                            echo "</p>";
-                            echo "<input type='checkbox' class='delete-checkbox' value='{$product['sku']}'>";
-                        }
-                    }
-                }
-                echo "</div>";
-            }
+            $productList->render();
         ?>
         </div>
     </form>
-    <div>
-        <?php
-            // $product = new Product($db);
-            // echo json_encode($product->fetchAll());
-        ?>
-    </div>
 <main>
 <script src="src/views/js/index.js"></script>
 </body> 
