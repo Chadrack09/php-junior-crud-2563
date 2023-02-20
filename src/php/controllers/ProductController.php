@@ -58,33 +58,5 @@ class ProductController {
       echo json_encode(array("message" => "Error creating the product!", "error" => $e->getMessage(), "data" => $postData, "status" => "error"));
     }
   }
-  
-
-
-
-//   public function createProduct($postData) {
-//     $sku = $postData['sku'];
-//     $name = $postData['name'];
-//     $price = $postData['price'];
-//     $type_id = intval($postData['types']);
-//     $productTypeData = array();
-
-//     if($type_id == 1) {
-//       $productTypeData['size'] = $postData['size'];
-//     } else if($type_id == 2) {
-//       $productTypeData['weight'] = $postData['weight'];
-//     } else if($type_id == 3) {
-//       $productTypeData['height'] = $postData['height'];
-//       $productTypeData['width'] = $postData['width'];
-//       $productTypeData['length'] = $postData['length'];
-//     }
-
-//     try {
-//       $this->product->create($sku, $name, $price, $type_id, $productTypeData);
-//       echo json_encode(array("message" => "Product created successfully!", "data" => $postData));
-//     } catch (PDOException $e) {
-//       echo json_encode(array("message" => "Error creating the product!", "error" => $e->getMessage(), "data" => $postData));
-//     }
-//   }
 }
 ?>
