@@ -1,34 +1,45 @@
 <?php
 
-require_once('./Product.php');
-require_once('./ProductTypes.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/src/php/models/Product.php');
 
-class Furniture extends ProductTypes {
+class Furniture extends Product
+{
     private $height;
     private $width;
     private $length;
 
-    public function getHeight() {
+    public function __construct($db)
+    {
+        parent::__construct($db);
+    }
+
+    public function getHeight()
+    {
         return $this->height;
     }
 
-    public function getWidth() {
+    public function getWidth()
+    {
         return $this->width;
     }
 
-    public function getLength() {
+    public function getLength()
+    {
         return $this->length;
     }
 
-    public function setHeight($height) {
+    public function setHeight($height)
+    {
         $this->height = $height;
     }
 
-    public function setWidth($width) {
+    public function setWidth($width)
+    {
         $this->width = $width;
     }
 
-    public function setLength($length) {
+    public function setLength($length)
+    {
         $this->length = $length;
     }
 }

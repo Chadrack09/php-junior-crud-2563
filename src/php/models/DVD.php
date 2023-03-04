@@ -1,16 +1,24 @@
 <?php
 
-require_once('./Product.php');
-require_once('./ProductTypes.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/src/php/models/Product.php');
 
-class DVD extends ProductTypes {
+class DVD extends Product
+{
+
+    public function __construct($db)
+    {
+        parent::__construct($db);
+    }
+
     private $size;
 
-    public function getSize() {
+    public function getSize()
+    {
         return $this->size;
     }
 
-    public function setSize($size) {
+    public function setSize($size)
+    {
         $this->size = $size;
     }
 }
