@@ -33,31 +33,32 @@ class ProductController
 
   public function createProduct($postData)
   {
-    $sku = $postData['sku'];
-    $name = $postData['name'];
-    $price = $postData['price'];
-    $type_id = intval($postData['types']);
-    $productTypeData = array();
+    $this->product->setSku($postData['sku']);
+    $this->product->setName($postData['name']);
+    $this->product->setPrice($postData['price']);
+    $this->product->setType(intval($postData['types']));
 
-    if ($type_id == 1) {
+    if ($this->product->getType() == 1) {
       if (!empty($postData['size'])) {
-        $productTypeData['size'] = $postData['size'];
+
+        $this->product->addProductTypeData('size', $postData['size']);
       } else {
         echo json_encode(array("message" => "Error creating the product! Size is required.", "data" => $postData, "status" => "error"));
         return;
       }
-    } else if ($type_id == 2) {
+    } else if ($this->product->getType() == 2) {
       if (!empty($postData['weight'])) {
-        $productTypeData['weight'] = $postData['weight'];
+        $this->product->addProductTypeData('weight', $postData['weight']);
       } else {
         echo json_encode(array("message" => "Error creating the product! Weight is required.", "data" => $postData, "status" => "error"));
         return;
       }
-    } else if ($type_id == 3) {
+    } else if ($this->product->getType() == 3) {
       if (!empty($postData['height']) && !empty($postData['width']) && !empty($postData['length'])) {
-        $productTypeData['height'] = $postData['height'];
-        $productTypeData['width'] = $postData['width'];
-        $productTypeData['length'] = $postData['length'];
+
+        $this->product->addProductTypeData('height', $postData['height']);
+        $this->product->addProductTypeData('width', $postData['width']);
+        $this->product->addProductTypeData('length', $postData['length']);
       } else {
         echo json_encode(array("message" => "Error creating the product! Height, width, and length are all required.", "data" => $postData, "status" => "error"));
         return;
@@ -65,15 +66,45 @@ class ProductController
     }
 
     try {
-      if ($type_id == 1) {
-        $this->dvd->create($sku, $name, $price, $type_id, $productTypeData);
-        echo json_encode(array("message" => "Product created successfully!", "data" => $postData, "status" => "success"));
-      } else if ($type_id == 2) {
-        $this->book->create($sku, $name, $price, $type_id, $productTypeData);
-        echo json_encode(array("message" => "Product created successfully!", "data" => $postData, "status" => "success"));
-      } else if ($type_id == 3) {
-        $this->furniture->create($sku, $name, $price, $type_id, $productTypeData);
-        echo json_encode(array("message" => "Product created successfully!", "data" => $postData, "status" => "success"));
+      if ($this->product->getType() == 1) {
+
+        $this->dvd->create(
+          $this->product->getSku(),
+          $this->product->getName(),
+          $this->product->getPrice(),
+          $this->product->getType(),
+          $this->product->getProductTypeData()
+        );
+        echo json_encode(array(
+          "message" => "Product created successfully!",
+          "data" => $postData, "status" => "success"
+        ));
+      } else if ($this->product->getType() == 2) {
+
+        $this->book->create(
+          $this->product->getSku(),
+          $this->product->getName(),
+          $this->product->getPrice(),
+          $this->product->getType(),
+          $this->product->getProductTypeData()
+        );
+        echo json_encode(array(
+          "message" => "Product created successfully!",
+          "data" => $postData, "status" => "success"
+        ));
+      } else if ($this->product->getType() == 3) {
+
+        $this->furniture->create(
+          $this->product->getSku(),
+          $this->product->getName(),
+          $this->product->getPrice(),
+          $this->product->getType(),
+          $this->product->getProductTypeData()
+        );
+        echo json_encode(array(
+          "message" => "Product created successfully!",
+          "data" => $postData, "status" => "success"
+        ));
       }
     } catch (PDOException $e) {
       echo json_encode(array("message" => "Error creating the product!", "error" => $e->getMessage(), "data" => $postData, "status" => "error"));
