@@ -64,6 +64,11 @@ abstract class Product
         $this->type_id = $type_id;
     }
 
+    public function addProductTypeData($key, $value)
+    {
+        $this->productTypeData[$key] = $value;
+    }
+
     public function getProductTypeData()
     {
         return $this->productTypeData;
